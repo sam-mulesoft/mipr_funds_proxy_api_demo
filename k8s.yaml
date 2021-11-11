@@ -1,0 +1,78 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: ${k8s_namespace}
+  labels:
+    name: ${k8s_namespace}
+    app: ${k8s_appname} 
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: ${k8s_configmap} 
+    namespace: ${k8s_namespace}
+data:
+    ANYPOINT_HOST: "${ANYPOINT_HOST}" 
+    ANYPOINT_PORT: "443" 
+    ANYPOINT_USERNAME: "${ANYPOINT_USERNAME}"
+    ANYPOINT_PASSWORD: "${ANYPOINT_PASSWORD}"
+    MULE_LICENSE_B64: "${MULE_LICENSE_B64}"
+    MULE_OPTS: "${MULE_OPTS}"
+    appName: "${k8s_appname}"
+    orgName: "${orgName}"
+    envName: "${envName}"
+    nodeStyle: "${nodeStyle}"
+    APP_DEPLOY_FROM: "/opt/stow"
+    APP_DEPLOY_STYLE: "MANAGED"
+    FIPS_ENABLED: "${FIPS_ENABLED}"
+    FIPS_AUTOCONFIG_JAVA: "${FIPS_AUTOCONFIG_JAVA}"
+    LOG4J_LOG_LEVEL: "${LOG4J_LOG_LEVEL}"
+    LOG4J_SYSLOG_ENABLED: "${LOG4J_SYSLOG_ENABLED}"
+    LOG4J_SYSLOG_HOST: "${OG4J_SYSLOG_LEVEL}"
+    LOG4J_SYSLOG_PORT: "${LOG4J_SYSLOG_PORT}"
+    LOG4J_SYSLOG_PROTOCOL: "${LOG4J_SYSLOG_PROTOCOL}"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ${k8s_service}
+  name: ${k8s_service}
+  namespace: ${k8s_namespace}
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8081
+    targetPort: ${appPort}
+    protocol: TCP
+  selector:
+    app: ${k8s_appname}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${k8s_appname}
+  labels:
+    app: ${k8s_appname}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ${k8s_appname}
+  template:
+    metadata:
+      labels:
+        app: ${k8s_appname}
+    spec:
+      containers:
+      - name: ${k8s_appname}
+        image: ${imageName}
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: ${k8s_configmap}
+        ports:
+        - containerPort: 8081

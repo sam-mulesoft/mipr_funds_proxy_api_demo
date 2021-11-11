@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="mipr-funds-test-suite.xml" />
+	<munit:test name="mipr-funds-test-suite-get:\MIPRNumSet\(mipr_number):mipr-funds-proxy-api-configTest" doc:id="dfd3b560-b36d-4b53-a3e5-c2b31655289e" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow Reference to Get MIPR Flow" doc:id="67c8c2f0-4375-45b8-823a-115302a40233" name="get:\MIPRNumSet\(mipr_number):mipr-funds-proxy-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression" doc:id="8bb30949-27d9-45e4-8e90-6bb60b5d7ecc" />
+		</munit:validation>
+	</munit:test>
+
+</mule>

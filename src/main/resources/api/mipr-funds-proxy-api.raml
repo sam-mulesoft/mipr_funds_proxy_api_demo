@@ -1,0 +1,60 @@
+#%RAML 1.0
+title: MIPR Funds Proxy API
+baseUri: https://localhost/sap
+description: Obtain the MIPR funds from backend system
+/MIPRNumSet/{mipr_number}:
+  get:
+    description: fetch funds by MIPR Number
+    responses:
+      "200":
+        body:
+          application/json:
+            type: MIPRResponse
+      "404":
+        description: MIPR number to query about
+        body:
+          application/json:
+            type: MIPRErrorResponse
+  uriParameters:
+    mipr_number:
+      description: MIPR number to query about
+      example: N6338707WR00004
+      type: string
+types:
+  MIPRResponse:
+    description: MIPR funds valid response values
+    properties:
+      MIPRNumber:
+        description: MIPR Number
+        example: ABC38484939222
+        type: string
+      AuthorizationFunds:
+        description: Authorization funds
+        example: "11401.23"
+        type: string
+      ChargedToMIPR:
+        description: Charged to MIPR
+        example: "80.0"
+        type: string
+      FundsAvailable:
+        description: Consumed funds available
+        example: "11321.23"
+        type: string
+      FundsAvailableTo:
+        description: MIPR expiration date
+        example: "20250128"
+        type: string
+  MIPRErrorResponse:
+    description: The error object
+    properties:
+      code:
+        example: NotFound
+        type: string
+      message:
+        properties:
+          lang:
+            example: en
+            type: string
+          value:
+            example: MIPR Number not found. Please enter valid MIPR Number.
+            type: string

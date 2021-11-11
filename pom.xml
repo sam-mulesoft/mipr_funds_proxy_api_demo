@@ -70,13 +70,7 @@
 			<version>1.2.2</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
-		<dependency>
-			<groupId>3d71544c-8e13-41cd-9a4c-9409564e15af</groupId>
-			<artifactId>mipr-funds-proxy-api</artifactId>
-			<version>1.0.0</version>
-			<classifier>raml</classifier>
-			<type>zip</type>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-apikit-module</artifactId>

@@ -137,10 +137,10 @@ output application/json
 ---
 {
 	FundsAvailableTo: "1234599",
-	MIPRNumber: "ABC12344939222",
+	MIPRNumber: attributes.uriParams.mipr_number,
 	AuthorizationFunds: "21001.23",
 	FundsAvailable: "21001.23",
-	ChargedToMIPR: "70.0"
+	ChargedToMIPR: "59.0"
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>

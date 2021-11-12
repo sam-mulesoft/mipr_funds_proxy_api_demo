@@ -30,4 +30,25 @@ In order for Jenkins to interact with Kubernetes and Docker, these two applicati
 
 There is no specific docker configuration necessary, docker simply serves as an image repository in this case. Technically this could be any image repostiory (ECR, Nexus, etc)
 
-### Clone this repository
+### Next Steps
+  1. Clone this repository
+  2. Configure your Jenkins job (see existing Jenkins file)
+
+|Jenkins variables     |Default value        | Required | Description                                         |
+|------------------------|---------------------|--------|--------------------------------------------|
+|`ANYPOINT_HOST`         |no default           |Yes 	|Anypoint hostname|
+|`ANYPOINT_USERNAME`     |no default           |Yes\* 	|Login username for Anypoint Platform           |
+|`ANYPOINT_PASSWORD`     |no default           |Yes\* 	|Login password for Anypoint Platform           |
+|`registry`    |no default           |Yes\* 	|The DockerHub Registry to which the images should be pushed          |
+|`dockerHubCreds`|no default           |Yes\* 	|DockerHub credentials (stored in Jenkins credentials provider)           |
+|`orgName`               |no default| Yes | Anypoint Organization name.  Ex: My Business   |
+|`envName`               |no default           | Yes |Anypoint environment name. Ex: Sandbox          |
+|`gitCreds`      |no default           |Yes |GitHub credentials (stored in Jenkins credentials provider)          |
+|`k8s_namespace`      |no default           |Yes |Desired K8S namespace            |
+|`k8s_appname`      |no default           |Yes |Desired K8S app map name            |
+|`k8s_configmap`      |no default           |Yes |Desired K8S config map name             |
+|`k8s_service`      |no default           |Yes |Desired K8S service name             |
+|`appPort`      |no default           |Yes |Port of running app             |
+|`imageName`      |no default           |Yes |Desired image name (including tag)             |
+ 3. Configure K8S environment and provide the ./kube/config file as Secret file named ```eks_config``` in Jenkins
+ 4. Push changes to your application in Git from Anypoint Studio

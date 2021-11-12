@@ -136,7 +136,7 @@ output application/json
 output application/json
 ---
 {
-	FundsAvailableTo: "1234599",
+	FundsAvailableTo: "123459920",
 	MIPRNumber: attributes.uriParams.mipr_number,
 	AuthorizationFunds: "21001.23",
 	FundsAvailable: "21001.23",

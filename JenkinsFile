@@ -1,0 +1,95 @@
+pipeline {
+
+  environment {
+
+    registry = "woody78/mipr_funds_proxy_api"
+    dockerHubCreds = 'docker_creds'
+    gitCreds = 'git_credentials'
+    dockerImage = ''
+    k8s_namespace = 'mipr-funds-api-ns'
+    k8s_appname = 'mipr-funds-api'
+    k8s_configmap = 'mipr-funds-cm'
+    ANYPOINT_HOST = 'anypoint.mulesoft.com'
+    ANYPOINT_USERNAME = '<username>'
+    ANYPOINT_PASSWORD = '<password>'
+    MULE_LICENSE_B64 = '<mulelicense>'
+    orgName = 'Department of Defense'
+    envName = 'Sandbox'
+    k8s_service = 'mipr-funds-api-lb-svc'
+    appPort = '8081'
+    imageName = 'woody78/mipr_funds_proxy_api:latest'
+      
+  }
+
+  agent any
+
+  stages {
+
+    stage('Cloning our Git') {
+
+      steps {
+
+        git url: 'https://github.com/mulesoft-consulting/mipr_funds_proxy_api.git', credentialsId: gitCreds, branch: "main"
+
+      }
+
+    }
+
+    stage('Building our image') {
+
+      steps {
+
+        script {
+
+          dockerImage = docker.build registry + ":latest"
+
+        }
+
+      }
+
+    }
+
+    stage('Deploy our image') {
+
+      steps {
+
+        script {
+
+          docker.withRegistry('', dockerHubCreds) {
+
+            dockerImage.push()
+
+          }
+
+        }
+
+      }
+
+    }
+
+    stage('Cleaning up') {
+
+      steps {
+
+        sh "docker rmi $registry:latest"
+
+      }
+
+    }
+
+    stage('Deploy to Kubernetes') {
+
+      steps {
+        withKubeConfig([credentialsId: 'eks_config']) {
+          sh '/usr/local/bin/kubectl config set-context --current --namespace=${k8s_namespace}'
+          sh 'envsubst < k8s.yaml | /usr/local/bin/kubectl apply -f -'
+          sh '/usr/local/bin/kubectl rollout restart deploy'
+        }
+
+      }
+
+    }
+
+  }
+
+}
